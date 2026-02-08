@@ -7,6 +7,64 @@
     <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <style>*{mont:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;padding:16px}.container{max-width:600px;margin:0 auto}h1{font-size:1.5em;font-weight:600;margin-bottom:8px;color:#fff}.subtitle{color:#666;font-size:.9em;margin-bottom:20px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:16px;text-align:center}.card .value{font-size:2.5em;font-weight:700;margin:8px 0}.card .label{color:#888;font-size:.8em;text-transform:uppercase}.good{color:#22c55e}.warn{color:#f59e0b}.bad{color:#ef4444}.neutral{color:#3b82f6}.section{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:12px}.section h2{font-size:1em;margin-bottom:12px;color:#fff;border-bottom:1px solid #333;padding-bottom:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #222}.row:last-child{border-bottom:none}.row .label{color:#aaa}.row .val{font-weight:600}.updated{text-align:center;color:#555;font-size:.8em;margin-top:20px}</style>
+  <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;padding:16px}.container{max-width:600px;margin:0 auto}h1{font-size:1.5em;font-weight:600;margin-bottom:8px;color:#fff}.subtitle{color:#666;font-size:.9em;margin-bottom:20px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:16px;text-align:center}.card .value{font-size:2.5em;font-weight:700;margin:8px 0}.card .label{color:#888;font-size:.8em;text-transform:uppercase}.good{color:#22c55e}.warn{color:#f59e0b}.bad{color:#ef4444}.neutral{color:#3b82f6}.section{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:12px}.section h2{font-size:1em;margin-bottom:12px;color:#fff;border-bottom:1px solid #333;padding-bottom:8px}.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #222}.row:last-child{border-bottom:none}.row .label{color:#aaa}.row .val{font-weight:600}.updated{text-align:center;color:#555;font-size:.8em;margin-top:20px}
+  #authGate{position:fixed;inset:0;background:#0a0a0a;z-index:9999;display:flex;align-items:center;justify-content:center}
+  #authGate .auth-box{text-align:center;max-width:320px;padding:40px 20px}
+  #authGate .lock{font-size:3.5em;margin-bottom:16px}
+  #authGate h2{color:#fff;font-weight:300;margin-bottom:24px;font-size:1.3em}
+  #authGate input{width:100%;padding:14px;background:#1a1a1a;border:1px solid #333;color:#fff;border-radius:8px;font-size:16px;text-align:center;letter-spacing:3px;outline:none}
+  #authGate input:focus{border-color:#2a7ae0}
+  #authGate .err{color:#ef4444;margin-top:10px;font-size:13px;min-height:18px}
+  #authGate button{width:100%;margin-top:12px;padding:12px;background:#2a7ae0;border:none;color:white;border-radius:8px;font-size:15px;cursor:pointer}
+  #authGate button:hover{background:#3a8af0}
+  #authGate .footer{color:#444;font-size:11px;margin-top:28px}
+  </style>
 </head>
-<body><div class="container"><h1>🤖 Bob Metrics</h1><div class="subtitle" id="date">2026-02-01</div><div class="grid"><div class="card"><div class="label">Escalations</div><div class="value warn">2</div></div><div class="card"><div class="label">Swarm Success</div><div class="value good">100%</div></div><div class="card"><div class="label">Tasks Done</div><div class="value good">100%</div></div><div class="card"><div class="label">Agents</div><div class="value good">8/8</div></div></div><div class="section"><h2>📊 Details</h2><div class="row"><span class="label">Heartbeats</span><span class="val">32</span></div><div class="row"><span class="label">Facts Recorded</span><span class="val">15</span></div><div class="row"><span class="label">Memory Hit Rate</span><span class="val">83%</span></div><div class="row"><span class="label">Arena Sessions</span><span class="val">6</span></div></div><div class="section"><h2>✨ Highlights</h2><div class="row"><span>✓ Metrics dashboard deployed</span></div><div class="row"><span>✓ Twilio SMS configured</span></div><div class="row"><span>✓ Bob Collective task system live</span></div></div><div class="updated">Last updated: 2026-02-01</div></div></body></html>
+<body>
+<!-- Auth Gate -->
+<div id="authGate">
+    <div class="auth-box">
+        <div class="lock">🔒</div>
+        <h2>Mission Control</h2>
+        <form onsubmit="return doAuth(event)">
+            <input type="password" id="pin" placeholder="Access code" autocomplete="off" autofocus>
+            <div class="err" id="err"></div>
+            <button type="submit">Authenticate</button>
+        </form>
+        <p class="footer">Bob Collective • Authorized Personnel Only</p>
+    </div>
+</div>
+
+<!-- Dashboard (hidden until auth) -->
+<div class="container" id="dash" style="display:none">
+    <h1>🤖 Bob Metrics</h1>
+    <div class="subtitle" id="date">2026-02-01</div>
+    <div class="grid">
+        <div class="card"><div class="label">Escalations</div><div class="value warn">2</div></div>
+        <div class="card"><div class="label">Swarm Success</div><div class="value good">100%</div></div>
+        <div class="card"><div class="label">Tasks Done</div><div class="value good">100%</div></div>
+        <div class="card"><div class="label">Agents</div><div class="value good">8/8</div></div>
+    </div>
+    <div class="section"><h2>📊 Details</h2>
+        <div class="row"><span class="label">Heartbeats</span><span class="val">32</span></div>
+        <div class="row"><span class="label">Facts Recorded</span><span class="val">15</span></div>
+        <div class="row"><span class="label">Memory Hit Rate</span><span class="val">83%</span></div>
+        <div class="row"><span class="label">Arena Sessions</span><span class="val">6</span></div>
+    </div>
+    <div class="section"><h2>✨ Highlights</h2>
+        <div class="row"><span>✓ Metrics dashboard deployed</span></div>
+        <div class="row"><span>✓ Twilio SMS configured</span></div>
+        <div class="row"><span>✓ Bob Collective task system live</span></div>
+    </div>
+    <div class="updated">Last updated: 2026-02-01</div>
+</div>
+
+<script>
+// SHA-256 hash of access code
+const H='e333eb06c49c0b6f28c672357d4154657e3afbcec8d4d4e76482e40e7e7c6b7f';
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function unlock(){document.getElementById('authGate').style.display='none';document.getElementById('dash').style.display='block'}
+async function doAuth(e){e.preventDefault();const v=document.getElementById('pin').value;if(await sha(v)===H){sessionStorage.setItem('mc_auth','1');unlock()}else{document.getElementById('err').textContent='Invalid access code';document.getElementById('pin').value='';document.getElementById('pin').focus()}return false}
+if(sessionStorage.getItem('mc_auth')==='1')unlock();
+</script>
+</body></html>
